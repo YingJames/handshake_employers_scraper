@@ -3,6 +3,16 @@
 This python based web scraper prints out a list of important information about all the employers that are present in a Career Fair event.
 This was only tested on the University of South Florida's Handshake, as well as using my own cookies, so your mileage may vary.
 
+
+The information that the web scraper gathers about each employer is listed:
+* Company Name
+* Description
+* Logo URL
+* Website URL
+* Job Titles
+* Job Types
+* Employment Types
+
 ## Installation
 
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install Beautiful Soup.
