@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import json
+import csv
 
 cookies = {
     'production_submitted_email_address': 'eyJfcmFpbHMiOnsibWVzc2FnZSI6IkltcGhiV1Z6ZVRFME9FQjFjMll1WldSMUlnPT0iLCJleHAiOiIyMDQzLTA5LTIwVDAzOjU4OjI1LjQ5N1oiLCJwdXIiOm51bGx9fQ%3D%3D--7d46c790faebb82fc57cba68375864b4b48acf41',
@@ -51,17 +52,49 @@ site_json = json.loads(soup.text)
 # employers = soup.find("h2", attrs={"class": "style__heading___29i1Z"})
 # # industry = soup.findAll("div", attrs={"div": ""})
 # print("test")
-for employer_data in site_json['results']:
-    print(f"Name: {employer_data['employer_name']}")
-    print(f"Description: {employer_data['company_description']}")
-    print(f"Industry: {employer_data['employer']['industry']['name']}")
-    print(f"Logo URL: {employer_data['employer']['logo_url']}")
-    print(f"Website: {employer_data['employer']['website']}")
-    print(f"Job Titles: {employer_data['job_titles']}\n")
-    print(f"Job Types:")
-    for job_type in employer_data['job_types']:
-        print(f"\t{job_type['name']}")
-    print(f"Employment Types:")
-    for job_type in employer_data['employment_types']:
-        print(f"\t{job_type['name']}")
-    print("=====================================================")
+fieldnames = [
+    "Name",
+    "Description",
+    "Industry",
+    "Logo URL",
+    "Website",
+    "Job Titles",
+    "Job Types",
+    "Employment Types",
+]
+with open("employers_list.csv", "w", newline="") as csvfile:
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+    writer.writeheader()
+    for employer_data in site_json['results']:
+        print(f"Name: {employer_data['employer_name']}")
+        print(f"Description: {employer_data['company_description']}")
+        print(f"Industry: {employer_data['employer']['industry']['name']}")
+        print(f"Logo URL: {employer_data['employer']['logo_url']}")
+        print(f"Website: {employer_data['employer']['website']}")
+        print(f"Job Titles: {employer_data['job_titles']}\n")
+        print(f"Job Types:")
+        for job_type in employer_data['job_types']:
+            print(f"\t{job_type['name']}")
+        print(f"Employment Types:")
+        for employment_type in employer_data['employment_types']:
+            print(f"\t{employment_type['name']}")
+        print("=====================================================")
+
+        job_types = [job_type['name'] for job_type in employer_data['job_types']]
+        all_job_types = ' - '.join(job_types)
+
+        employment_type = [employment_type['name'] for employment_type in employer_data['employment_types']]
+        all_employment_types = ' - '.join(employment_type)
+
+        writer.writerow(
+            {
+                "Name": employer_data["employer_name"],
+                "Description": employer_data["company_description"],
+                "Industry": employer_data["employer"]["industry"]["name"],
+                "Logo URL": employer_data["employer"]["logo_url"],
+                "Website": employer_data["employer"]["website"],
+                "Job Titles": employer_data["job_titles"],
+                "Job Types": all_job_types,
+                "Employment Types": all_employment_types,
+            }
+        )
