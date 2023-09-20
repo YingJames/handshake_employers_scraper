@@ -3,6 +3,8 @@ import requests
 import json
 import csv
 
+employer_list_URL = input("Example: https://usf.joinhandshake.com/career_fairs/42906/employers_list\n\tPaste Handshake Career Fair URL and press enter: ")
+
 cookies = {
     'production_submitted_email_address': 'eyJfcmFpbHMiOnsibWVzc2FnZSI6IkltcGhiV1Z6ZVRFME9FQjFjMll1WldSMUlnPT0iLCJleHAiOiIyMDQzLTA5LTIwVDAzOjU4OjI1LjQ5N1oiLCJwdXIiOm51bGx9fQ%3D%3D--7d46c790faebb82fc57cba68375864b4b48acf41',
     'production_current_user': '32603307',
@@ -17,7 +19,7 @@ headers = {
     'Accept': 'application/json, text/javascript, */*; q=0.01',
     'Accept-Language': 'en-US,en;q=0.5',
     # 'Accept-Encoding': 'gzip, deflate, br',
-    'Referer': 'https://usf.joinhandshake.com/career_fairs/42600/employers_list',
+    'Referer': employer_list_URL,
     'X-CSRF-Token': 'EZBPKgReIZtdTrzZPCgFllZglwkTa08w+Y7GRm2TuaNsblqMje8txK/WgQ4NYU3aY2hR+uBfRo+yy4S2ZwHshg==',
     'X-Requested-With': 'XMLHttpRequest',
     'Connection': 'keep-alive',
@@ -40,7 +42,7 @@ params = {
 }
 
 response = requests.get(
-    'https://usf.joinhandshake.com/career_fairs/42600/employers_list',
+    employer_list_URL,
     params=params,
     cookies=cookies,
     headers=headers,
@@ -98,3 +100,5 @@ with open("employers_list.csv", "w", newline="") as csvfile:
                 "Employment Types": all_employment_types,
             }
         )
+
+print("employers_list.csv Spreadsheet created!")
